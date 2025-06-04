@@ -47,7 +47,7 @@ function isAccount(value) {
 }
 
 function isName(value) {
-    return /^[a-zA-Z\s]+$/.test(value);
+    return /^[a-zA-ZÀ-ỹ\s]+$/.test(value);
 }
 
 function isEmail(value) {
@@ -151,6 +151,10 @@ function validateForm(emp) {
 
 var employees = [];
 
+function isUniqueAccount(account) {
+    return !employees.some(function(e) { return e.account === account; });
+}
+
 function renderTable(list) {
     var tbody = document.getElementById('tableDanhSach');
     tbody.innerHTML = '';
@@ -190,7 +194,12 @@ function getFormData() {
 function addEmployee() {
     var emp = getFormData();
     if (!validateForm(emp)) return;
+    if (!isUniqueAccount(emp.account)) {
+        showError('tbTKNV', 'Tài khoản đã tồn tại');
+        return;
+    }
     employees.push(emp);
+    hideError('tbTKNV');
     renderTable(employees);
     $('#myModal').modal('hide');
 }
@@ -260,11 +269,14 @@ function normalize(str) {
         .toLowerCase();
 }
 
-function searchByType() {
-    var keyword = normalize(document.getElementById('searchName').value);
+function filterEmployees() {
+    var nameKey = normalize(document.getElementById('searchName').value);
+    var typeKey = normalize(document.getElementById('filterType').value);
     var filtered = employees.filter(function(emp) {
         emp.classify();
-        return normalize(emp.type).includes(keyword);
+        var matchName = normalize(emp.name).includes(nameKey);
+        var matchType = !typeKey || normalize(emp.type) === typeKey;
+        return matchName && matchType;
     });
     renderTable(filtered);
 }
@@ -274,8 +286,9 @@ function init() {
     document.getElementById('btnThem').addEventListener('click', resetForm);
     document.getElementById('btnThemNV').addEventListener('click', addEmployee);
     document.getElementById('btnCapNhat').addEventListener('click', updateEmployee);
-    document.getElementById('btnTimNV').addEventListener('click', searchByType);
-    document.getElementById('searchName').addEventListener('keyup', searchByType);
+    document.getElementById('btnTimNV').addEventListener('click', filterEmployees);
+    document.getElementById('searchName').addEventListener('keyup', filterEmployees);
+    document.getElementById('filterType').addEventListener('change', filterEmployees);
 }
 
 if (document.readyState !== 'loading') {

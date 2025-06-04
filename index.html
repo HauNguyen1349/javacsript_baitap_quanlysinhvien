@@ -121,16 +121,23 @@
 
 					<!-- Body -->
 					<div class="card-body">
-						<div class="row mb-3">
-							<div class="col">
-								<div class="input-group">
-									<input type="text" class="form-control" placeholder="Loại nhân viên" id="searchName">
-									<div class="input-group-prepend">
-										<span class="input-group-text" id="btnTimNV"><i class="fa fa-search"></i></span>
-									</div>
-								</div>
-							</div>
-						</div>
+                                                <div class="row mb-3">
+                                                        <div class="col">
+                                                                <div class="input-group">
+                                                                        <input type="text" class="form-control" placeholder="Tìm tên nhân viên" id="searchName">
+                                                                        <select class="custom-select" id="filterType">
+                                                                                <option value="">Tất cả loại</option>
+                                                                                <option value="Xuất sắc">Xuất sắc</option>
+                                                                                <option value="Giỏi">Giỏi</option>
+                                                                                <option value="Khá">Khá</option>
+                                                                                <option value="Trung bình">Trung bình</option>
+                                                                        </select>
+                                                                        <div class="input-group-prepend">
+                                                                                <span class="input-group-text" id="btnTimNV"><i class="fa fa-search"></i></span>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                </div>
 						<table class="table table-bordered table-hover myTable">
 							<thead class="text-primary">
 								<tr>
