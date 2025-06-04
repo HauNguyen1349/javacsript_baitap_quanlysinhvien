@@ -261,10 +261,16 @@ function searchByType() {
     renderTable(filtered);
 }
 
-// event bindings
-window.addEventListener('DOMContentLoaded', function() {
+// attach event handlers regardless of script load timing
+function init() {
     document.getElementById('btnThem').addEventListener('click', resetForm);
     document.getElementById('btnThemNV').addEventListener('click', addEmployee);
     document.getElementById('btnCapNhat').addEventListener('click', updateEmployee);
     document.getElementById('btnTimNV').addEventListener('click', searchByType);
-});
+}
+
+if (document.readyState !== 'loading') {
+    init();
+} else {
+    window.addEventListener('DOMContentLoaded', init);
+}
