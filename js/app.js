@@ -252,11 +252,19 @@ function resetForm() {
     });
 }
 
+function normalize(str) {
+    return str
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+}
+
 function searchByType() {
-    var keyword = document.getElementById('searchName').value.toLowerCase();
+    var keyword = normalize(document.getElementById('searchName').value);
     var filtered = employees.filter(function(emp) {
         emp.classify();
-        return emp.type.toLowerCase().includes(keyword);
+        return normalize(emp.type).includes(keyword);
     });
     renderTable(filtered);
 }
@@ -267,6 +275,7 @@ function init() {
     document.getElementById('btnThemNV').addEventListener('click', addEmployee);
     document.getElementById('btnCapNhat').addEventListener('click', updateEmployee);
     document.getElementById('btnTimNV').addEventListener('click', searchByType);
+    document.getElementById('searchName').addEventListener('keyup', searchByType);
 }
 
 if (document.readyState !== 'loading') {
