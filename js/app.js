@@ -151,6 +151,29 @@ function validateForm(emp) {
 
 var employees = [];
 
+function saveEmployees() {
+    localStorage.setItem('employees', JSON.stringify(employees));
+}
+
+function loadEmployees() {
+    var data = localStorage.getItem('employees');
+    if (data) {
+        var arr = JSON.parse(data);
+        employees = arr.map(function(e) {
+            return new Employee(
+                e.account,
+                e.name,
+                e.email,
+                e.password,
+                e.date,
+                e.salary,
+                e.role,
+                e.hours
+            );
+        });
+    }
+}
+
 function isUniqueAccount(account) {
     return !employees.some(function(e) { return e.account === account; });
 }
@@ -200,7 +223,8 @@ function addEmployee() {
     }
     employees.push(emp);
     hideError('tbTKNV');
-    renderTable(employees);
+    saveEmployees();
+    filterEmployees();
     $('#myModal').modal('hide');
 }
 
@@ -208,7 +232,8 @@ function deleteEmployee(account) {
     employees = employees.filter(function(e) {
         return e.account !== account;
     });
-    renderTable(employees);
+    saveEmployees();
+    filterEmployees();
 }
 
 var currentEdit = null;
@@ -242,7 +267,8 @@ function updateEmployee() {
     currentEdit.salary = Number(emp.salary);
     currentEdit.role = emp.role;
     currentEdit.hours = Number(emp.hours);
-    renderTable(employees);
+    saveEmployees();
+    filterEmployees();
     $('#myModal').modal('hide');
     document.getElementById('tknv').disabled = false;
     document.getElementById('btnThemNV').style.display = 'inline-block';
@@ -289,6 +315,8 @@ function init() {
     document.getElementById('btnTimNV').addEventListener('click', filterEmployees);
     document.getElementById('searchName').addEventListener('keyup', filterEmployees);
     document.getElementById('filterType').addEventListener('change', filterEmployees);
+    loadEmployees();
+    filterEmployees();
 }
 
 if (document.readyState !== 'loading') {
