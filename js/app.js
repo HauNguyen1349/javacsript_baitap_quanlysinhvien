@@ -246,7 +246,7 @@ function editEmployee(account) {
     document.getElementById('name').value = emp.name;
     document.getElementById('email').value = emp.email;
     document.getElementById('password').value = emp.password;
-    document.getElementById('datepicker').value = emp.date;
+    renderAntdDatepicker(emp.date);
     document.getElementById('luongCB').value = emp.salary;
     document.getElementById('chucvu').value = emp.role;
     document.getElementById('gioLam').value = emp.hours;
@@ -285,6 +285,7 @@ function resetForm() {
     errors.forEach(function(sp) {
         sp.style.display = 'none';
     });
+    renderAntdDatepicker(moment().format('MM/DD/YYYY'));
 }
 
 function normalize(str) {
@@ -317,6 +318,7 @@ function init() {
     document.getElementById('filterType').addEventListener('change', filterEmployees);
     loadEmployees();
     filterEmployees();
+    renderAntdDatepicker(moment().format('MM/DD/YYYY'));
 }
 
 if (document.readyState !== 'loading') {
