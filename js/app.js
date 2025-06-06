@@ -1,5 +1,3 @@
-
-"use strict";
 // Employee management app
 // Define Employee class
 class Employee {
@@ -53,6 +51,7 @@ function isName(value) {
 }
 
 function isEmail(value) {
+    // simple email regex
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
@@ -290,7 +289,11 @@ function resetForm() {
 }
 
 function normalize(str) {
-    return str.toString().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    return str
+        .toString()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
 }
 
 function filterEmployees() {
