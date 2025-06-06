@@ -1,3 +1,5 @@
+
+"use strict";
 // Employee management app
 // Define Employee class
 class Employee {
@@ -39,7 +41,7 @@ class Employee {
 
 // helpers for validation
 function isRequired(value) {
-    return value.trim() !== '';
+    return String(value).trim() !== '';
 }
 
 function isAccount(value) {
@@ -47,11 +49,10 @@ function isAccount(value) {
 }
 
 function isName(value) {
-    return /^[a-zA-Z\s]+$/.test(value);
+    return /^[a-zA-ZÀ-ỹ\s]+$/.test(value);
 }
 
 function isEmail(value) {
-    // simple email regex
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
@@ -151,6 +152,33 @@ function validateForm(emp) {
 
 var employees = [];
 
+function saveEmployees() {
+    localStorage.setItem('employees', JSON.stringify(employees));
+}
+
+function loadEmployees() {
+    var data = localStorage.getItem('employees');
+    if (data) {
+        var arr = JSON.parse(data);
+        employees = arr.map(function(e) {
+            return new Employee(
+                e.account,
+                e.name,
+                e.email,
+                e.password,
+                e.date,
+                e.salary,
+                e.role,
+                e.hours
+            );
+        });
+    }
+}
+
+function isUniqueAccount(account) {
+    return !employees.some(function(e) { return e.account === account; });
+}
+
 function renderTable(list) {
     var tbody = document.getElementById('tableDanhSach');
     tbody.innerHTML = '';
@@ -190,8 +218,14 @@ function getFormData() {
 function addEmployee() {
     var emp = getFormData();
     if (!validateForm(emp)) return;
+    if (!isUniqueAccount(emp.account)) {
+        showError('tbTKNV', 'Tài khoản đã tồn tại');
+        return;
+    }
     employees.push(emp);
-    renderTable(employees);
+    hideError('tbTKNV');
+    saveEmployees();
+    filterEmployees();
     $('#myModal').modal('hide');
 }
 
@@ -199,7 +233,8 @@ function deleteEmployee(account) {
     employees = employees.filter(function(e) {
         return e.account !== account;
     });
-    renderTable(employees);
+    saveEmployees();
+    filterEmployees();
 }
 
 var currentEdit = null;
@@ -212,7 +247,7 @@ function editEmployee(account) {
     document.getElementById('name').value = emp.name;
     document.getElementById('email').value = emp.email;
     document.getElementById('password').value = emp.password;
-    document.getElementById('datepicker').value = emp.date;
+    renderAntdDatepicker(emp.date);
     document.getElementById('luongCB').value = emp.salary;
     document.getElementById('chucvu').value = emp.role;
     document.getElementById('gioLam').value = emp.hours;
@@ -233,7 +268,8 @@ function updateEmployee() {
     currentEdit.salary = Number(emp.salary);
     currentEdit.role = emp.role;
     currentEdit.hours = Number(emp.hours);
-    renderTable(employees);
+    saveEmployees();
+    filterEmployees();
     $('#myModal').modal('hide');
     document.getElementById('tknv').disabled = false;
     document.getElementById('btnThemNV').style.display = 'inline-block';
@@ -250,21 +286,40 @@ function resetForm() {
     errors.forEach(function(sp) {
         sp.style.display = 'none';
     });
+    renderAntdDatepicker(moment().format('MM/DD/YYYY'));
 }
 
-function searchByType() {
-    var keyword = document.getElementById('searchName').value.toLowerCase();
+function normalize(str) {
+    return str.toString().normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+}
+
+function filterEmployees() {
+    var nameKey = normalize(document.getElementById('searchName').value);
+    var typeKey = normalize(document.getElementById('filterType').value);
     var filtered = employees.filter(function(emp) {
         emp.classify();
-        return emp.type.toLowerCase().includes(keyword);
+        var matchName = normalize(emp.name).includes(nameKey);
+        var matchType = !typeKey || normalize(emp.type) === typeKey;
+        return matchName && matchType;
     });
     renderTable(filtered);
 }
 
-// event bindings
-window.addEventListener('DOMContentLoaded', function() {
+// attach event handlers regardless of script load timing
+function init() {
     document.getElementById('btnThem').addEventListener('click', resetForm);
     document.getElementById('btnThemNV').addEventListener('click', addEmployee);
     document.getElementById('btnCapNhat').addEventListener('click', updateEmployee);
-    document.getElementById('btnTimNV').addEventListener('click', searchByType);
-});
+    document.getElementById('btnTimNV').addEventListener('click', filterEmployees);
+    document.getElementById('searchName').addEventListener('keyup', filterEmployees);
+    document.getElementById('filterType').addEventListener('change', filterEmployees);
+    loadEmployees();
+    filterEmployees();
+    renderAntdDatepicker(moment().format('MM/DD/YYYY'));
+}
+
+if (document.readyState !== 'loading') {
+    init();
+} else {
+    window.addEventListener('DOMContentLoaded', init);
+}
