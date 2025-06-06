@@ -1,3 +1,4 @@
+"use strict";
 // Employee management app
 // Define Employee class
 class Employee {
