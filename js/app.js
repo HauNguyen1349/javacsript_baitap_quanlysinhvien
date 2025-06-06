@@ -1,3 +1,6 @@
+
+"use strict";
+
 // Employee management app
 // Define Employee class
 class Employee {
@@ -157,20 +160,14 @@ function saveEmployees() {
 
 function loadEmployees() {
     var data = localStorage.getItem('employees');
+    if (!data) return;
+    try {
     if (data) {
-        var arr = JSON.parse(data);
-        employees = arr.map(function(e) {
-            return new Employee(
-                e.account,
-                e.name,
-                e.email,
-                e.password,
-                e.date,
-                e.salary,
-                e.role,
-                e.hours
-            );
-        });
+
+    } catch (err) {
+        console.error('Failed to load employees from localStorage', err);
+        employees = [];
+        localStorage.removeItem('employees');
     }
 }
 
