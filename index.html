@@ -12,8 +12,8 @@
 	<!-- Bootstrap 4 -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 
-	<!-- JQuery UI -->
-	<link rel="stylesheet" href="css/jquery-ui.min.css">
+        <!-- Ant Design -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.5/antd.min.css" />
 
 	<!-- Animate -->
 	<!-- <link rel="stylesheet" href="css/animate.css"> -->
@@ -121,16 +121,23 @@
 
 					<!-- Body -->
 					<div class="card-body">
-						<div class="row mb-3">
-							<div class="col">
-								<div class="input-group">
-									<input type="text" class="form-control" placeholder="Loại nhân viên" id="searchName">
-									<div class="input-group-prepend">
-										<span class="input-group-text" id="btnTimNV"><i class="fa fa-search"></i></span>
-									</div>
-								</div>
-							</div>
-						</div>
+                                                <div class="row mb-3">
+                                                        <div class="col">
+                                                                <div class="input-group">
+                                                                        <input type="text" class="form-control" placeholder="Tìm tên nhân viên" id="searchName">
+                                                                        <select class="custom-select" id="filterType">
+                                                                                <option value="">Tất cả loại</option>
+                                                                                <option value="Xuất sắc">Xuất sắc</option>
+                                                                                <option value="Giỏi">Giỏi</option>
+                                                                                <option value="Khá">Khá</option>
+                                                                                <option value="Trung bình">Trung bình</option>
+                                                                        </select>
+                                                                        <div class="input-group-prepend">
+                                                                                <span class="input-group-text" id="btnTimNV"><i class="fa fa-search"></i></span>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                </div>
 						<table class="table table-bordered table-hover myTable">
 							<thead class="text-primary">
 								<tr>
@@ -174,9 +181,9 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 
-				<header class="head-form mb-0">
-					<h2 id="header-title">Log In</h2>
-				</header>
+                                <header class="head-form mb-0">
+                                        <h2 id="header-title">Thêm Nhân Viên</h2>
+                                </header>
 
 				<!-- Modal Header -->
 				<!-- 	<div class="modal-header">
@@ -240,8 +247,8 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text"><i class="fa fa-calendar"></i></span>
 								</div>
-								<input type="text" name="ngaylam" id="datepicker" class="form-control"
-									placeholder="Ngày làm">
+                                                                <div id="antd-date-container" class="flex-grow-1"></div>
+                                                                <input type="hidden" name="ngaylam" id="datepicker">
 							</div>
 
 							<span class="sp-thongbao" id="tbNgay"></span>
@@ -264,7 +271,7 @@
 								</div>
 								<select class="form-control" id="chucvu">
 									<option>Chọn chức vụ</option>
-									<option>Sếp</option>
+									<option>Giám đốc</option>
 									<option>Trưởng phòng</option>
 									<option>Nhân viên</option>
 								</select>
@@ -289,7 +296,7 @@
 				<!-- Modal footer -->
 				<div class="modal-footer" id="modal-footer">
 					<button id="btnThemNV" type="button" class="btn btn-success">Thêm người dùng</button>
-					<button id="btnCapNhat" type="button" class="btn btn-success">Cập nhật</button>
+                                        <button id="btnCapNhat" type="button" class="btn btn-success" style="display:none">Cập nhật</button>
 					<button id="btnDong" type="button" class="btn btn-danger" data-dismiss="modal">Đóng</button>
 				</div>
 
@@ -303,10 +310,13 @@
 	<script type="text/javascript" src="js/popper.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 
-	<!-- Date Picker -->
-	<!-- <script src="js/jquery-ui.min.js"></script> -->
-	<script src="./js/jquery-ui.js"></script>
-	<script src="js/datepicker.js"></script>
+        <!-- Date Picker -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/antd/4.24.5/antd.min.js"></script>
+        <script src="js/antd-datepicker.js"></script>
+        <script src="js/app.js"></script>
 
 	<!-- Wow -->
 	<!-- <script src="js/wow.min.js"></script>	
